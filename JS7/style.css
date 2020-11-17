@@ -1,0 +1,7 @@
+body {
+height: 200px; background: rgb(167, 167, 167);
+}
+.dot {
+height: 8px; width: 8px; border-radius: 4px;
+background: rgb(106, 11, 161); position: absolute;
+}
