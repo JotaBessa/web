@@ -1,0 +1,62 @@
+body{
+	width: 100vw;
+	height: 100vh;
+	background: #0a8f8f;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+  	align-items: center;
+
+}
+
+.reserva {
+	background-image: url('assets/reserva.png');
+  	position: relative;
+  	left: 0;
+  	top: 0;
+  	z-index: 1;
+  	border: 5px solid rgb(255, 255, 255);
+}
+
+.foco {
+	background-image: url('assets/foco.gif');
+  	position: absolute;
+  	z-index: 2;
+}
+
+.caveira{
+	background-image: url('assets/caveira.gif');
+  	position: absolute;
+  	z-index: 2;
+}
+
+.pontos{
+	display: block;
+	position: relative;
+	font-size: 60px;
+        font-style: oblique;
+  	z-index: 2;
+}
+
+.devastacao{
+	background-image: url('assets/devastacao.png');
+  position: absolute;
+  z-index: 2;
+}
+
+.arvore {
+	background-image: url('assets/arvore.png');
+	display: block;
+	position: relative;
+}
+
+.gameOver{
+	font-size: 60px;
+	font-style: inherit;
+	color: rgb(19, 16, 16);
+	z-index: 3;
+	position: absolute;
+	font-weight: bold;
+	text-align: center;
+}
+
