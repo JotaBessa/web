@@ -1,0 +1,18 @@
+<div class="content">
+<h1>Adicionar Curso</h1>
+<form method="POST" action="/curso/create">
+    <p>Sigla</p>
+    <input name="sigla" class="form-control col-5" type="text" value="{{curso.sigla}}">
+    <div class="invalid-feedback d-block">{{showError errors "sigla"}}</div>
+    <p>Nome</p>
+    <input name="nome" class="form-control col-5" type="text" value="{{curso.nome}}">
+    <div class="invalid-feedback d-block">{{showError errors "nome"}}</div>
+    <p>Descrição do Curso</p>
+    <textarea name="descricao" class="form-control col-6">{{curso.descricao}}</textarea>
+        <h3 style="margin: 25px 0">Área do Conhecimento</h3>
+        {{#each areas}}
+            <p><input type="radio" name="areaId" value={{id}}> {{nome}}</p>
+        {{/each}}
+    <button class="btn btn-success">Criar Novo Curso &nbsp; &nbsp;   <i class="fa fa-plus"></i></button>
+</form>
+</div>

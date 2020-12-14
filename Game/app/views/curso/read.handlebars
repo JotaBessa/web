@@ -1,0 +1,14 @@
+<div class="content form-group">
+        <div class="curso col-3">
+            <h1>{{curso.sigla}}</h1>
+            <p><b>Nome:</b> {{curso.nome}}</p>
+            <p><b>Área do Conhecimento</b>: {{curso.Area.nome}}</p>
+            <p>Descrição:<br>{{curso.descricao}}</p>
+        </div>
+    <button class="btn btn-success" id="novo_curso">Novo Curso</button>
+</div>
+<script>
+    $("#novo_curso").click(() => {
+        window.location.href = "/curso/create"
+    })
+</script>

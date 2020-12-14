@@ -1,0 +1,19 @@
+<div class="content form-group">
+<h1 style="margin: 25px 0">Cursos Cadastrados</h1>
+<div style="display: flex; flex-wrap: wrap">
+{{#each cursos}}
+    <div class="curso col-3">
+        <h1>{{sigla}}</h1>
+    <p><b>Nome:</b> {{nome}}</p>
+    <p><b>Área do Conhecimento</b>: {{Area.nome}}</p>
+    <a href='/curso/read/{{id}}'>Ver mais</a>
+    </div>
+{{/each}}
+</div>
+<button class="btn btn-success" id="novo_curso">Novo Curso</button>
+</div>
+<script>
+    $("#novo_curso").click(() => {
+        window.location.href = "/curso/create"
+    })
+</script>

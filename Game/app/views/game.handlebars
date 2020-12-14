@@ -1,0 +1,231 @@
+<div id="game">
+    <h1 style="margin-top: 15px;">{{titulo}}</h1>
+    <script>
+    (function () {
+
+            const FPS = 1;
+            let gameDim = [1243, 960];
+            let focoDim = [100, 130];
+            let probFoco = 5;
+            let temp = 0;
+            let gmrt;
+            let gr;
+            let gpause;
+            let reserva;
+            let focos = [];
+            let cav = [];
+
+
+            function init() {
+
+                gpause = document.createElement("div");
+                gpause.style.position = "absolute";
+                gpause.style.marginTop = "585px";
+                gpause.style.padding = "15px 30px"
+                gpause.style.maxWidth = "500px"
+                gpause.style.backgroundColor = "rgba(0,0,0,0.6)"
+                gpause.style.textAlign = "center";
+                gpause.style.marginLeft = (gameDim[0] / 2 - 250) + "px";
+                gpause.style.zIndex = "5";
+                gpause.innerHTML = "<h1 style='color: #FF0; margin: 0'>Aperte S</h1>";
+                document.body.append(gpause);
+                gr = new Base();
+                gr.criaH();
+                reserva = new Reserva();
+            }
+
+            window.addEventListener("keydown", function (t) {
+                if (t.key === 'p' || t.key === "P") {
+                    gr.tpause(gpause);
+                    console.log(gr.paused);
+                    if (!gr.paused) {
+                        gmrt = setInterval(run, 1000 / FPS);
+                    } else {
+                        clearInterval(gmrt);
+                    }
+                }
+
+                if ((t.key === "S" || t.key === "s") && !gr.started && gr.paused) {
+                    gr.tpause(gpause);
+                    gr.started = true;
+                    gmrt = setInterval(run, 1000 / FPS);
+                    if (gpause.innerHTML === "Game Over. Aperte S para começar") {
+                        gr.upH()
+                    }
+                    gpause.innerHTML = "Pause";
+                }
+            })
+
+            class Reserva {
+                constructor() {
+                    this.element = document.createElement("div");
+                    this.element.className = "reserva";
+                    this.element.style.marginTop = "90px"
+                    this.element.style.width = `${gameDim[0]}px`;
+                    this.element.style.height = `${gameDim[1]}px`;
+                    document.body.appendChild(this.element);
+                }
+            }
+
+            class Caveira {
+                constructor() {
+                    this.element = document.createElement("div");
+                    this.element.className = "caveira";
+                    this.element.style.width = `${focoDim[0]}px`;
+                    this.element.style.height = `${focoDim[1]}px`;
+                    this.element.style.left = `${Math.floor((Math.random() * (gameDim[0] - focoDim[0])))}px`;
+                    this.element.style.top = `${Math.floor((Math.random() * (gameDim[1] - focoDim[1])))}px`;
+
+                    this.clicked = false;
+
+                    this.element.onclick = () => {
+                        this.element.style.display = "none";
+                        this.clicked = true;
+                        gr.npts();
+                    }
+
+                    setTimeout(() => {
+                        if (!this.clicked) {
+                            this.element.style.backgroundImage = `url("./css/assets/devastacao.png")`
+                            this.element.style.backgroundSize = `contain`;
+                            this.element.style.backgroundRepeat = 'no-repeat';
+                            if (gpause.style.display === 'none') {
+                                if (gr.LIVES >= 2) {
+                                    gr.tvidas();
+                                    gr.tvidas();
+                                }
+                            }
+                        } else {
+                            this.element.parentNode.removeChild(this.element);
+                        }
+                    }, 2000);
+
+                    reserva.element.appendChild(this.element);
+
+                }
+            }
+
+            class NIncendio {
+                constructor() {
+                    this.element = document.createElement("div");
+                    this.element.className = "foco-incendio";
+                    this.element.style.width = `${focoDim[0]}px`;
+                    this.element.style.height = `${focoDim[1]}px`;
+                    this.element.style.left = `${Math.floor((Math.random() * (gameDim[0] - focoDim[0])))}px`;
+                    this.element.style.top = `${Math.floor((Math.random() * (gameDim[1] - focoDim[1])))}px`;
+                    this.clicked = false;
+                    this.element.onclick = t => {
+                        this.element.style.display = "none";
+                        this.clicked = true;
+                        gr.npts();
+                    }
+
+                    setTimeout(() => {
+                        if (!this.clicked) {
+                            this.element.style.backgroundImage = `url("./css/assets/devastacao.png")`
+                            this.element.style.backgroundSize = `contain`;
+                            this.element.style.backgroundRepeat = 'no-repeat';
+                            if (gpause.style.display === 'none') {
+                                gr.tvidas();
+                            }
+                        } else {
+                            this.element.parentNode.removeChild(this.element);
+                        }
+                    }, 2000);
+
+                    reserva.element.appendChild(this.element);
+                }
+            }
+            class Base {
+                constructor() {
+                    this.points = 0;
+                    this.LIVES = 5;
+                    this.paused = true;
+                    this.started = false;
+                }
+                criaH = () => {
+                    this.elHeader = document.createElement("div");
+                    this.elHeader.style.display = "flex";
+                    this.elPoints = this.rpts();
+                    this.elLives = this.rvidas();
+                    this.elHeader.appendChild(this.elLives);
+                    this.elHeader.appendChild(this.elPoints);
+                    document.body.appendChild(this.elHeader);
+                }
+
+                upH = () => {
+                    this.elPoints.innerHTML = this.points;
+                    for (let i = 0; i < this.LIVES; i++)
+                        this.elLives.innerHTML += (`<img src="./css/assets/arvore.png">`)
+                }
+                rvidas = () => {
+                    let LIVES = document.createElement("div");
+                    LIVES.style.width = "80%";
+                    for (let i = 0; i < this.LIVES; i++)
+                        LIVES.innerHTML += (`<img src="./css/assets/arvore.png">`)
+                    this.elLives = LIVES;
+                    return LIVES;
+                }
+
+                rpts = () => {
+                    let elPoints = document.createElement("h1");
+                    elPoints.style.textAlign = "right";
+                    elPoints.style.justifySelf = "flex-end";
+                    elPoints.append(this.points);
+                    return elPoints;
+                }
+
+                tpause = (gpause) => {
+                    if (this.paused) {
+                        gpause.style.display = "none";
+                    } else {
+                        gpause.style.display = "block";
+                    }
+                    this.paused = !this.paused;
+                }
+
+
+                npts = () => {
+                    this.points += 10;
+                    this.elPoints.innerHTML = this.points;
+                }
+
+                tvidas = () => {
+                    this.LIVES--;
+                    this.elLives.innerHTML = "";
+                    for (let i = 0; i < this.LIVES; i++) {
+                        this.elLives.innerHTML += (`<img src="./css/assets/arvore.png">`)
+                    }
+                    this.isgameover(this.LIVES);
+                }
+
+                isgameover = (lives) => {
+                    if (lives === 0) {
+                        gpause.innerHTML = "<h1 style='color: #FFF; margin: 0'>Game Over! Aperte S para começar novamente!</h1>";
+                        gpause.style.display = "block";
+                        clearInterval(gmrt);
+                        this.points = 0;
+                        this.LIVES = 5;
+                        this.paused = true;
+                        this.started = false;
+                    }
+                }
+            }
+
+            function run() {
+                temp += 0.5;
+                if (Math.random() * 100 < probFoco * temp) {
+                    let foco = new NIncendio();
+                    focos.push(foco);
+                }
+                if (Math.random() * 100 < probFoco * temp) {
+                    let caveira = new Caveira();
+                    cav.push(caveira);
+                }
+            }
+
+            init();
+        })();
+
+    </script>
+</div>
